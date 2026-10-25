@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A</title>
+</head>
+<body>
+    <script type="module">
+
+// 1. Initialiser la connexion avec un serveur STUN public (fourni par Google)
+const peer = new RTCPeerConnection({
+  iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+});
+
+// 2. Créer le canal de données pour s'envoyer des messages
+const canal = peer.createDataChannel('chat');
+
+canal.onopen = () => canal.send('Salut depuis le pair A !');
+canal.onmessage = (e) => console.log('Message reçu :', e.data);
+
+// 3. Quand une coordonnée réseau (ICE candidate) est prête
+peer.onicecandidate = (event) => {
+  if (!event.candidate) {
+    // Tout le SDP est packagé : c'est ce texte qu'il faut donner au Pair B
+    console.log("OFFRE À COPIER :", JSON.stringify(peer.localDescription));
+  }
+};
+
+// 4. Générer l'offre
+const offre = await peer.createOffer();
+await peer.setLocalDescription(offre);
+
+// 5. Plus tard, quand le Pair B te donne sa réponse :
+// await peer.setRemoteDescription(reponseDuPairB);
+
+
+
+    </script>
+</body>
+</html>

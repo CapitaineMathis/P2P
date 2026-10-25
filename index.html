@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>P2P</title>
+  <style>
+    body { font-family: sans-serif; max-width: 650px; margin: 2rem auto; display: flex; flex-direction: column; gap: 1rem; }
+    textarea { width: 100%; height: 90px; }
+    .box { border: 1px solid #ccc; padding: 1rem; border-radius: 6px; }
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    <h3>1. Initialisation</h3>
+    <button id="btnCreate">Créer une connexion (Pair A)</button>
+    <p>Ton jeton à copier (Offre ou Réponse) :</p>
+    <textarea id="myToken" readonly placeholder="Clique sur 'Créer' ou colle un jeton adverse pour générer le tien..."></textarea>
+  </div>
+
+  <div class="box">
+    <h3>2. Connexion adverse</h3>
+    <p>Colle ici le jeton reçu de l'autre pair :</p>
+    <textarea id="remoteToken" placeholder="Colle l'offre (si tu es Pair B) ou la réponse (si tu es Pair A)..."></textarea>
+    <button id="btnConnect">Valider le jeton adverse</button>
+  </div>
+
+  <div class="box">
+    <h3>3. Messagerie directe</h3>
+    <div id="status">Statut : Déconnecté</div>
+    <input type="text" id="msgInput" placeholder="Ton message..." disabled>
+    <button id="btnSend" disabled>Envoyer</button>
+    <pre id="logs"></pre>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

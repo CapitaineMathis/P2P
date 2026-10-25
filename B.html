@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B</title>
+</head>
+<body>
+
+    <textarea name="text" id="text"></textarea>
+    <button id="btn">button</button>
+
+    <script type="module">
+
+document.getElementById("btn").addEventListener("click", async () => {
+    const textInput = document.getElementById("text").value;
+    const eee = JSON.parse(textInput)
+    const offreDuPairA = JSON.parse(eee)
+    console.log(offreDuPairA)
+
+
+    const peer = new RTCPeerConnection({
+        iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+    });
+
+    // 1. Écouter l'arrivée du canal créé par A
+    peer.ondatachannel = (event) => {
+    const canal = event.channel;
+        canal.onmessage = (e) => console.log('Message reçu :', e.data);
+        canal.onopen = () => canal.send('Bien reçu pair A !');
+    };
+
+    // 2. Ingérer l'offre de A reçue par message
+    await peer.setRemoteDescription(offreDuPairA);
+
+    // 3. Générer la réponse
+    const reponse = await peer.createAnswer();
+    await peer.setLocalDescription(reponse);
+
+    peer.onicecandidate = (event) => {
+    if (!event.candidate) {
+        // C'est ce texte qu'il faut renvoyer au Pair A
+        console.log("RÉPONSE À RENVOYER :", JSON.stringify(peer.localDescription));
+    }
+    };
+})
+    </script>
+</body>
+</html>
